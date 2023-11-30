@@ -1,12 +1,22 @@
 import express, { Request, Response } from 'express'
+import bodyParser from 'body-parser'
+
+import 'dotenv/config'
+
+import * as config from './config'
+import { api } from './api'
 
 const app = express()
-const port = 3000
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!')
+app.use(bodyParser.json())
+
+app.use('/api', api())
+
+app.listen(config.PORT, () => {
+  console.log(`API Server started on port ${config.PORT}`)
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+/**
+ * TODO: create crud endpoints for email template
+ * TODO: create endpoints to send emails
+ */
