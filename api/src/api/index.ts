@@ -13,9 +13,9 @@ export const api = (): Router => {
 
   router.get('/email-templates', requestHandlerWrapper(requestHandler.emailTemplate.listEmailTemplates))
   router.post('/email-template', validateSchema(requestHandler.emailTemplate.schema.createEmailTemplate()), requestHandlerWrapper(requestHandler.emailTemplate.createEmailTemplate))
-  router.get('/email-template/:emailTemplateId', requestHandlerWrapper(requestHandler.emailTemplate.retrieveEmailTemplate))
-  router.patch('/email-template/:emailTemplateId', requestHandlerWrapper(requestHandler.emailTemplate.updateEmailTemplate))
-  router.delete('/email-template/:emailTemplateId', requestHandlerWrapper(requestHandler.emailTemplate.deleteEmailTemplate))
+  router.get('/email-template/:emailTemplateId', validateSchema(requestHandler.emailTemplate.schema.retrieveEmailTemplate()), requestHandlerWrapper(requestHandler.emailTemplate.retrieveEmailTemplate))
+  router.patch('/email-template/:emailTemplateId', validateSchema(requestHandler.emailTemplate.schema.updateEmailTemplate()), requestHandlerWrapper(requestHandler.emailTemplate.updateEmailTemplate))
+  router.delete('/email-template/:emailTemplateId', validateSchema(requestHandler.emailTemplate.schema.deleteEmailTemplate()), requestHandlerWrapper(requestHandler.emailTemplate.deleteEmailTemplate))
 
   router.use((error: Error, _1: Request, res: Response, _2: NextFunction) => {
     if (error instanceof StandardError) {

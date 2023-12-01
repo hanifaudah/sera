@@ -3,6 +3,10 @@ import { compile } from 'handlebars'
 import { StandardError } from '../util/error'
 
 const validateSlug = async (slug: string): Promise<void> => {
+  if (!slug.match(/^[a-z0-9-]+[a-z0-9]+$/)) {
+    throw new StandardError('Invalid slug format, follow this pattern: /^[a-z0-9-]+[a-z0-9]+$/', { status: 400 })
+  }
+
   const prismaClient = new PrismaClient()
   const slugCount = await prismaClient.emailTemplate.count({
     where: {

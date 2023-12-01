@@ -5,16 +5,21 @@ import 'dotenv/config'
 
 import * as config from './config'
 import { api } from './api'
+import { startServices } from './service'
 
-const app = express()
+(async () => {
+  await startServices()
 
-app.use(bodyParser.json())
+  const app = express()
 
-app.use('/api', api())
+  app.use(bodyParser.json())
 
-app.listen(config.PORT, () => {
-  console.log(`API Server started on port ${config.PORT}`)
-})
+  app.use('/api', api())
+
+  app.listen(config.PORT, () => {
+    console.log(`API Server started on port ${config.PORT}`)
+  })
+})()
 
 /**
  * TODO: create crud endpoints for email template
