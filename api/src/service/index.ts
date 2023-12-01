@@ -1,5 +1,7 @@
 export * as emailTemplate from './emailTemplate'
+export * as sendEmail from './sendEmail'
 import { PrismaClient } from '@prisma/client'
+import { QueueService } from './queueService'
 
 export const startServices = async (): Promise<void> => {
   console.log('Starting services...')
@@ -11,4 +13,6 @@ export const startServices = async (): Promise<void> => {
     console.log('Error connecting to database')
     process.exit(0)
   }
+
+  await QueueService.getInstance().start()
 }
