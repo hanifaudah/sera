@@ -43,3 +43,15 @@ export const createEmailTemplate = async (req: Request, res: Response, _: NextFu
     emailTemplate
   })
 }
+
+export const retrieveEmailTemplate = async (req: Request, res: Response, _: NextFunction): Promise<void> => {
+  // TODO: implement
+}
+
+export const updateEmailTemplate = async (req: Request, res: Response, _: NextFunction): Promise<void> => {
+  // TODO: implement
+}
+
+export const deleteEmailTemplate = async (req: Request, res: Response, _: NextFunction): Promise<void> => {
+  // TODO: implement
+}
