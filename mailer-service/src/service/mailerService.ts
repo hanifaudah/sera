@@ -16,6 +16,7 @@ export const sendMail = async (data: SendEmailJobData) => {
   if (config.SMTP_PORT === undefined || config.SMTP_PORT === null) {
     throw new StandardError('SMTP_PORT is not defined', { status: 500 })
   }
+
   const transporter = nodemailer.createTransport({
     options: {
       host: config.SMTP_HOST,
@@ -26,14 +27,19 @@ export const sendMail = async (data: SendEmailJobData) => {
       user: config.SMTP_USER,
       pass: config.SMTP_PASS,
     },
-  });
+  })
 
-  const info = await transporter.sendMail({
-    from: data.from,
-    to: data.to,
-    subject: data.subject,
-    text: data.emailString
-  });
+  try {
+    console.log('Sending mail...')
+    const info = await transporter.sendMail({
+      from: data.from,
+      to: data.to,
+      subject: data.subject,
+      text: data.emailString
+    })
 
-  console.log("Message sent: %s", info.messageId);
+    console.log("Message sent: %s", info.messageId)
+  } catch (error) {
+    console.log('Error', error)
+  }
 }
