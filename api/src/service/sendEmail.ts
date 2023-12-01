@@ -18,6 +18,8 @@ export const sendEmail = async (data: SendEmailData): Promise<SendEmailJobData> 
 
   const template = compile(emailTemplate.template)
   const emailString = template(parameters)
+  console.log('[HANIF DEBUG]', emailTemplate.template)
+  console.log('[HANIF DEBUG]', parameters)
 
   if (config.MAILER_FROM === undefined) {
     throw new StandardError('MAILER_FROM not set', { status: 500 })
