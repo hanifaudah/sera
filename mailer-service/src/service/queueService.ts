@@ -10,7 +10,19 @@ export class QueueService {
   private connection: Redis
 
   public constructor() {
+    console.log('Connecting to Redis...')
+    if (!config.REDIS_URL) {
+      console.error('REDIS_URL not set')
+      process.exit(1)
+    }
     this.connection = new Redis(config.REDIS_URL)
+    this.connection.on('error', async (error) => {
+      console.error('Redis connection error', error)
+      process.exit(1)
+    })
+    this.connection.on('connect', async () => {
+      console.log('Connected to Redis')
+    })
     this.queues = {}
     this.workers = {}
   }
@@ -23,18 +35,38 @@ export class QueueService {
   }
 
   public async start(): Promise<void> {
-    console.log('Starting queue service...')
-    this.addQueue(config.EMAIL_QUEUE_NAME)
-    this.addWorker(config.EMAIL_QUEUE_NAME, emailHandler)
-    console.log('Queue service started')
+    try {
+      console.log('Starting queue service...')
+      this.addQueue(config.EMAIL_QUEUE_NAME)
+      this.addWorker(config.EMAIL_QUEUE_NAME, emailHandler)
+      console.log('Queue service started')
+    } catch (error) {
+      console.error('Error starting queue service')
+      process.exit(0)
+    }
   }
 
   public async stop(): Promise<void> {
     console.log('Stopping queue service...')
-    await Promise.all(Object.values(this.workers).map(worker => worker.close()))
-    await Promise.all(Object.values(this.queues).map(queue => queue.close()))
-    await this.connection.disconnect()
-    console.log('Queue service stopped')
+    try {
+      if (Object.keys(this.workers).length === 0) {
+        console.log('Queue service not started')
+        return
+      }
+      await Promise.all(Object.values(this.queues).map(queue => queue.close()))
+
+      if (Object.keys(this.queues).length === 0) {
+        console.log('Queue service not started')
+        return
+      }
+      await Promise.all(Object.values(this.workers).map(worker => worker.close()))
+
+      await this.connection.disconnect()
+      console.log('Queue service stopped')
+    } catch (error) {
+      console.error('Error stopping queue service')
+      process.exit(0)
+    }
   }
 
   private addQueue(queueName: string): void {

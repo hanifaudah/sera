@@ -1,3 +1,4 @@
+import { Redis } from "ioredis"
 import { QueueService } from "./queueService"
 
 export const startServices = async () => {
@@ -5,5 +6,9 @@ export const startServices = async () => {
 }
 
 export const stopServices = async () => {
-  await QueueService.getInstance().stop()
+  try {
+    await QueueService.getInstance().stop()
+  } catch (error) {
+    console.error('Error stopping queue service')
+  }
 }

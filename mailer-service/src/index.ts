@@ -1,10 +1,10 @@
 import 'dotenv/config'
 
-import { QueueService } from './service/queueService'
 import { gracefulShutdown } from './util/gracefulShutdown'
+import { startServices } from './service'
 
 (async () => {
-  QueueService.getInstance().start()
+  await startServices()
 
   gracefulShutdown()
 })()
