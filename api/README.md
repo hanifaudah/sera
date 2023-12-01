@@ -1,4 +1,4 @@
-# Install API ependencies
+# Install API Dependencies
 
 ```
 yarn install
