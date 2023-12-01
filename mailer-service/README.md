@@ -1,4 +1,4 @@
-# Install Mailer Service ependencies
+# Install Mailer Service Dependencies
 
 ```
 yarn install
